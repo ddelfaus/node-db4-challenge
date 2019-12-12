@@ -3,7 +3,7 @@ exports.up = function(knex) {
   return knex.schema
 
         
-    .createTable("recipes", tbl => {
+  .createTableIfNotExists("recipes", tbl => {
         tbl.increments();
     
         tbl.string("name", 255)
@@ -51,8 +51,10 @@ exports.up = function(knex) {
     .createTable("instructions", tbl => {
         tbl.increments();
          
-         
-        tbl.string("name", 255)
+        tbl.integer("step_number") 
+            .notNullable()
+
+        tbl.string("step", 255)
             .notNullable()
             .unique();
 
@@ -70,5 +72,9 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  
+    return knex.schema
+    .dropTableIfExists('ingredients')
+    .dropTableIfExists('recipes')
+    .dropTableIfExists('recipe_ingredient')
+    .dropTableIfExists('instructions')
 };
